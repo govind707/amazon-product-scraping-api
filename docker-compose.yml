@@ -1,0 +1,35 @@
+version: "3.8"
+
+volumes: 
+  mongodata:
+
+services:
+  frontend:
+    build:
+      context: ./amazon-scraper-api
+      dockerfile: Dockerfile
+    image: amazon-scraper-api
+    ports:
+      - "3030:3030"
+    expose:
+      - 3030
+    container_name: Amazon-Scraper-API
+  
+  backend:
+    build:
+      context: ./amazon-collector-api
+      dockerfile: Dockerfile
+    image: amazon-collector-api
+    ports:
+      - "3031:3031"
+    container_name: Amazon-Collector-API
+  
+  database:
+    image: mongo:4.4.2
+    ports:
+      - "27017:27017"
+    container_name: MongoDB
+    volumes:
+      - type: volume
+        source: mongodata
+        target: /data/db
